@@ -1,5 +1,5 @@
-# cube-3D
-🎲 Animação de um cubo em 3D feito na linguagem C utilizando caracteres ASCII
+# 🎲 cube-3D
+Animação de um cubo em 3D feito na linguagem C utilizando caracteres ASCII
 
 ## Dependências
   -> GCC

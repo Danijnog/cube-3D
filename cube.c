@@ -5,15 +5,15 @@
 
 float A, B, C;
 
-float cubeWidth = 10;
-int width = 160, height = 40;
-float zBuffer[160 * 40];
-char buffer[160 * 40];
+float cubeWidth = 20;
+int width = 160, height = 38;
+float zBuffer[160 * 38];
+char buffer[160 * 38];
 int backgroundASCIICode = ' ';
-int distanceFromCam = 50;
+int distanceFromCam = 100;
 float K1 = 40;
 
-float incrementSpeed = 0.5;
+float incrementSpeed = 0.6;
 float x, y, z;
 float ooz;
 int xp, yp;
@@ -45,7 +45,7 @@ void calculateForSurface(float cubeX, float cubeY, float cubeZ, int ch) {
     z = calculateAxesZ(cubeX, cubeY, cubeZ) + distanceFromCam;
 
     ooz = 1/z;
-    xp = (int)(width/2 + K1 * ooz * x * 2); //multiplicado por 2 para aumentar o tamanho do cubo
+    xp = (int)(width/2 - 2 * cubeWidth + K1 * ooz * x * 2); //distancia do cubo em relação ao centro da tela
     yp = (int)(height / 2 + K1 * ooz * y);
     idx = xp + yp * width;
     if(idx >= 0 && idx < width * height) 
@@ -63,7 +63,7 @@ int main() {
     printf("\x1b[2J]"); //esse printf serve para limpar a tela
     while(1) {
         memset(buffer, backgroundASCIICode, width * height); //memset serve para preencher um bloco de memoria com um valor especifico
-        memset(zBuffer, 0, width * height * sizeof(float)); //primeiro parametro: começo do endereço de memoria a ser preenchido
+        memset(zBuffer, 0, width * height * 4); //primeiro parametro: começo do endereço de memoria a ser preenchido
                                                                     //segundo parametro: valor a ser preenchido
                                                                     //terceiro parametro: numero de bytes a ser peenchido a partir do primeiro parametro
         for(float cubeX = - cubeWidth; cubeX < cubeWidth; cubeX += incrementSpeed)
@@ -75,17 +75,18 @@ int main() {
                 calculateForSurface(-cubeWidth, cubeY, -cubeX, '~');
                 calculateForSurface(-cubeX, cubeY, cubeWidth, '@');
                 calculateForSurface(cubeX, -cubeWidth, -cubeY, ';');
-                calculateForSurface(cubeX, cubeWidth, cubeY, '-');
+                calculateForSurface(cubeX, cubeWidth, cubeY, '+');
             }   
         }
         printf("\x1b[H"); //esse printf serve para posicionar o cursor no inicio da tela        
         for(int i = 0; i < width * height; i++)
         {
-            putchar(i % width ? buffer[i] : 5); //putchar serve para imprimir um caracter na tela
+            putchar(i % width ? buffer[i] : 10); //putchar serve para imprimir um caracter na tela
         }
         A += 0.005;
         B += 0.005;
-        usleep(1500); //usleep serve para dar um delay na execução do programa por um tempo especifico (em microsegundos
+        C += 0.01;
+        usleep(1000); //usleep serve para dar um delay na execução do programa por um tempo especifico (em microsegundos
     }                                              
     return 0;
 }

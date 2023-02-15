@@ -7,15 +7,15 @@ float A, B, C;
 
 float cubeWidth = 20;
 int width = 160, height = 38;
-float zBuffer[160 * 38];
-char buffer[160 * 38];
+float zBuffer[160 * 38]; //array de profundidade
+char buffer[160 * 38]; //array de caracteres
 int backgroundASCIICode = ' ';
 int distanceFromCam = 100;
 float K1 = 40;
 
 float incrementSpeed = 0.6;
 float x, y, z;
-float ooz;
+float ooz; //profundidade
 int xp, yp;
 int idx;
 
@@ -50,10 +50,10 @@ void calculateForSurface(float cubeX, float cubeY, float cubeZ, int ch) {
     idx = xp + yp * width;
     if(idx >= 0 && idx < width * height) 
     {
-        if(ooz > zBuffer[idx])
+        if(ooz > zBuffer[idx]) //se o valor de profundidade (ooz) for maior q o valor de profundidade armazenado no buffer de profundidade (zBuffer)
         {
-            zBuffer[idx] = ooz;
-            buffer[idx] = ch;
+            zBuffer[idx] = ooz; //atualiza o buffer de profundidade com um novo valor
+            buffer[idx] = ch; //atualiza o buffer de caracteres com um novo caracter
         }
     }
 }
@@ -81,7 +81,11 @@ int main() {
         printf("\x1b[H"); //esse printf serve para posicionar o cursor no inicio da tela        
         for(int i = 0; i < width * height; i++)
         {
-            putchar(i % width ? buffer[i] : 10); //putchar serve para imprimir um caracter na tela
+            putchar(i % width == 0 ? 10 : buffer[i]); //putchar serve para imprimir um caracter na tela
+            // if(i % width == 0) //se o resto da divisao de i por width == 0
+            //     putchar(10); //imprime um caracter de nova linha
+            // else
+            //  putchar(buffer[i]); //se nao for, imprime o caracter armazenado no buffer
         }
         A += 0.005;
         B += 0.005;
